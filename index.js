@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => {
     const tempDisplay = document.querySelector(".bg1 .text h1:nth-child(2)");
     const powerStatus = document.querySelector(".bg1 .text h1:nth-child(3)");
     const addBtn = document.getElementById("add");
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const timeDisplay = document.querySelector("h3:nth-of-type(2)");
 
     let temperature = 25;
-    let isOn = false; // Start OFF
+    let isOn = false;
     let scheduledTime = null;
     let scheduledAction = null;
 
@@ -28,14 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
             target.setMinutes(targetMinutes);
             target.setSeconds(0);
 
-            let diff = Math.floor((target - now) / 1000); // in seconds
+            let diff = Math.floor((target - now) / 1000);
 
             if (diff >= 0) {
                 const minutes = Math.floor(diff / 60).toString().padStart(2, "0");
                 const seconds = (diff % 60).toString().padStart(2, "0");
-                timeDisplay.innerHTML = `Time : in ${minutes}:${seconds}`;
+                const actionText = scheduledAction === "on" ? "= > ON" : "= > OFF";
+                timeDisplay.innerHTML = `Time: in ${minutes}:${seconds}  ${actionText} `;
             } else {
-                // Time passed — clear the display
                 timeDisplay.innerHTML = "Time :";
             }
         } else {
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Sending status:", data);
 
-        fetch('https://68a4c2f3c123272fb9b3b847.mockapi.io/Tele1', {  // Replace with your mockapi URL
+        fetch('https://68a4c2f3c123272fb9b3b847.mockapi.io/Tele1', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return t;
     }
 
-    // Timer logic every 10s
     setInterval(() => {
         if (!scheduledTime || !scheduledAction) return;
 
@@ -99,12 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
             updateUI();
             sendStatus();
         }
-    }, 10000);
+    }, 10000); // check every 10 seconds
 
-    // Live countdown every 1s
     setInterval(() => {
         updateUI();
-    }, 1000);
+    }, 1000); // update UI every second
 
     addBtn.addEventListener("click", () => {
         if (isOn && temperature < 35) {
